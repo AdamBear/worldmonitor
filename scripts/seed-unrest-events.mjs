@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { loadEnvFile, CHROME_UA, runSeed } from './_seed-utils.mjs';
+import { getAcledToken } from './shared/acled-oauth.mjs';
 
 loadEnvFile(import.meta.url);
 
@@ -8,6 +9,7 @@ const GDELT_GKG_URL = 'https://api.gdeltproject.org/api/v1/gkg_geojson';
 const ACLED_API_URL = 'https://acleddata.com/api/acled/read';
 const CANONICAL_KEY = 'unrest:events:v1';
 const CACHE_TTL = 3600;
+
 
 // ---------- ACLED Event Type Mapping (from _shared.ts) ----------
 
@@ -90,9 +92,9 @@ function sortBySeverityAndRecency(events) {
 // ---------- ACLED Fetch ----------
 
 async function fetchAcledProtests() {
-  const token = process.env.ACLED_ACCESS_TOKEN;
+  const token = await getAcledToken({ userAgent: CHROME_UA });
   if (!token) {
-    console.log('  ACLED_ACCESS_TOKEN not set, skipping ACLED');
+    console.log('  ACLED: no credentials configured, skipping');
     return [];
   }
 
