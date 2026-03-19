@@ -214,6 +214,32 @@ export function resolveLayerLabel(def: LayerDefinition, tFn?: (key: string) => s
     const translated = tFn(I18N_PREFIX + def.i18nSuffix);
     if (translated && translated !== I18N_PREFIX + def.i18nSuffix) return translated;
   }
+
+  // Fallback: Check if Chinese is set in localStorage and use Chinese labels directly
+  const storedLang = typeof localStorage !== 'undefined' ? localStorage.getItem('i18nextLng') : null;
+  if (storedLang === 'zh') {
+    const zhLabels: Record<string, string> = {
+      iranAttacks: '伊朗攻击', intelHotspots: '情报热点', conflictZones: '地区冲突',
+      militaryBases: '军事基地', nuclearSites: '核设施', gammaIrradiators: '伽马辐照器',
+      spaceports: '航天发射场', satellites: '轨道监视', underseaCables: '海底电缆',
+      pipelines: '管道', aiDataCenters: 'AI数据中心', militaryActivity: '军事活动',
+      shipTraffic: '船舶交通', tradeRoutes: '贸易航线', flightDelays: '航空',
+      protests: '抗议活动', ucdpEvents: '武装冲突事件', displacementFlows: '流离失所流向',
+      climateAnomalies: '气候异常', weatherAlerts: '天气预警', internetOutages: '互联网中断',
+      cyberThreats: '网络威胁', naturalEvents: '自然事件', fires: '火灾',
+      strategicWaterways: '战略水道', economicCenters: '经济中心', criticalMinerals: '关键矿产',
+      gpsJamming: 'GPS干扰', ciiChoropleth: '不稳定指数', dayNight: '昼夜',
+      sanctions: '制裁', startupHubs: '创业中心', techHQs: '科技总部',
+      accelerators: '加速器', cloudRegions: '云区域', techEvents: '科技活动',
+      stockExchanges: '证券交易所', financialCenters: '金融中心', centralBanks: '央行',
+      commodityHubs: '大宗商品枢纽', gulfInvestments: '海湾投资', positiveEvents: '正面事件',
+      kindness: '善举', happiness: '幸福指数', speciesRecovery: '物种恢复',
+      renewableInstallations: '清洁能源', miningSites: '矿场', processingPlants: '加工厂',
+      commodityPorts: '大宗商品港口'
+    };
+    if (zhLabels[def.i18nSuffix]) return zhLabels[def.i18nSuffix];
+  }
+
   return def.fallbackLabel;
 }
 

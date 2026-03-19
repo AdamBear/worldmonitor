@@ -44,8 +44,10 @@ const activeMeta = VARIANT_META[activeVariant] || VARIANT_META.full;
 function htmlVariantPlugin(): Plugin {
   return {
     name: 'html-variant',
-    transformIndexHtml(html) {
-      let result = html
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+        let result = html
         .replace(/<title>.*?<\/title>/, `<title>${activeMeta.title}</title>`)
         .replace(/<meta name="title" content=".*?" \/>/, `<meta name="title" content="${activeMeta.title}" />`)
         .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${activeMeta.description}" />`)
@@ -109,6 +111,7 @@ function htmlVariantPlugin(): Plugin {
       }
 
       return result;
+      }
     },
   };
 }
@@ -820,7 +823,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 3109,
     open: !isE2E,
     hmr: isE2E ? false : undefined,
     watch: {

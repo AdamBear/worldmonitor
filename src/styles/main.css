@@ -13812,7 +13812,7 @@ a.prediction-link:hover {
 }
 
 .deckgl-layer-toggles .toggle-label {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text);
   letter-spacing: 0.5px;

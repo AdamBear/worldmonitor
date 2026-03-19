@@ -352,14 +352,29 @@ if (urlParams.get('settings') === '1') {
     }
   );
 } else {
-  installUtmInterceptor();
-  const app = new App('app');
-  app
-    .init()
-    .then(() => {
-      clearChunkReloadGuard(chunkReloadStorageKey);
-    })
-    .catch(console.error);
+  // Check if DEMO_PAGE mode is enabled
+  const isDemoPage = import.meta.env.VITE_DEMO_PAGE === '1';
+
+  if (isDemoPage) {
+    // Render logistics dashboard demo page
+    import('./components/LogisticsDashboard').then(({ createLogisticsDashboard }) => {
+      const container = document.getElementById('app');
+      if (container) {
+        const dashboard = createLogisticsDashboard();
+        container.appendChild(dashboard);
+      }
+    }).catch(console.error);
+  } else {
+    // Render normal application
+    installUtmInterceptor();
+    const app = new App('app');
+    app
+      .init()
+      .then(() => {
+        clearChunkReloadGuard(chunkReloadStorageKey);
+      })
+      .catch(console.error);
+  }
 }
 
 // Debug helpers for geo-convergence testing (remove in production)
